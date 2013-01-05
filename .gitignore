@@ -1,0 +1,38 @@
+*.cache
+*.DS_Store
+
+*target*
+*.jar
+*.war
+*.ear
+*.class
+*bin*
+*build*
+!build.gradle
+!build.xml
+!build.properties
+# eclipse specific git ignore
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+.gradle/
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+#emacs
+*~
