@@ -1,0 +1,105 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+buildDir = 'target'
+
+ext {
+    consoleVersion = '1.0.0.BUILD-SNAPSHOT'
+    isBuildSnapshot = consoleVersion.endsWith(".BUILD-SNAPSHOT")
+    antTraxVersion = "1.7.1"
+    antVersion = "1.8.4"
+    commonsBeanUtilsVersion = "1.8.3"
+    commonsCliVersion = "1.2"
+    commonsCollectionsVersion = "3.2.1"
+    commonsIOVersion = "2.1"
+    commonsLangVersion = "2.6"
+    gantVersion = "1.9.6"
+    groovyVersion = "2.0.5"
+    gradleGroovyVersion = groovyVersion
+    gradleGroovyVersion = "1.8.2"
+    ivyVersion = "2.2.0"
+    jlineVersion = "1.0"
+    slf4jVersion = "1.7.2"
+    junitVersion = "4.11"
+    jansiVersion = "1.2.1"
+    s2utilVersion = "0.0.1"
+    mockitoVersion ="1.9.0"
+}
+
+version = consoleVersion
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://maven.seasar.org/maven2"
+    }
+}
+
+dependencies {
+    groovy group: 'org.codehaus.groovy', name: 'groovy', version: "${groovyVersion}"
+    compile "jline:jline:$jlineVersion",
+            "org.fusesource.jansi:jansi:$jansiVersion",
+            "org.apache.ant:ant:${antVersion}",
+            "org.apache.ant:ant-launcher:${antVersion}",
+            "org.apache.ant:ant-trax:${antTraxVersion}",
+            "org.apache.ivy:ivy:${ivyVersion}",
+            "org.seasar.util:s2util:${s2utilVersion}"
+    compile("org.codehaus.gant:gant_groovy1.8:${gantVersion}") {
+        exclude module:'commons-cli'
+    }
+
+    compile("junit:junit:${junitVersion}")
+    
+    testCompile "org.mockito:mockito-core:${mockitoVersion}"
+}
+
+eclipse.classpath.file {
+    whenMerged { classpath ->
+        classpath.entries.findAll { entry ->
+            entry.kind == "src"
+        }.each { entry ->
+            entry.output = "target/classes"
+        }
+    }
+}
+
+assemble.doLast {
+    copy {
+        from configurations.runtime
+        into "$buildDir/assembly/lib"
+    }
+    copy {
+        from "src/main/runtime"
+        into "$buildDir/assembly"
+    }
+    copy {
+        from "$libsDir"
+        into "$buildDir/assembly/lib"
+    }
+
+    ant.chmod(perm: "+x",
+              dir: new File("$buildDir/assembly/bin"),
+              includes: '*' ,
+              excludes: '*.bat')
+}
+
+def defaultEncoding = 'UTF-8'
+compileJava {
+    options.encoding = defaultEncoding
+}
+compileTestJava {
+    options.encoding = defaultEncoding
+}
+compileGroovy {
+    groovyOptions.encoding = defaultEncoding
+    options.encoding = defaultEncoding
+}
+compileTestGroovy {
+    groovyOptions.encoding = defaultEncoding
+    options.encoding = defaultEncoding
+}
