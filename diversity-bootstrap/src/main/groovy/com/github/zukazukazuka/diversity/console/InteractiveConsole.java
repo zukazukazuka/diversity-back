@@ -89,4 +89,7 @@ public class InteractiveConsole {
 		}
 	}
 
+	public PrintStream getOut(){
+		return this.out;
+	}
 }

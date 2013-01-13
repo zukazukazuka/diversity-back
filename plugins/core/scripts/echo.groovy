@@ -3,4 +3,4 @@ target ( stuff : 'A target to do some stuff.' ) {
   echo ( message : 'A default message from Ant.' )
 }
 
-setDefaultTarget ( stuff )
+setDefaultTarget ('stuff')

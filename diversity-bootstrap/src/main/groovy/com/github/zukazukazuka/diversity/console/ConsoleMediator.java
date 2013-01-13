@@ -34,11 +34,12 @@ public class ConsoleMediator {
 		this.pluginRepository = pluginRepository;
 		buildCommands();
 		this.setUpCompletor();
+		//this.scriptRunner.addListener(new ConsoleBuildLogger(console));
 	}
 
 	protected void buildCommands() {
 		this.commands.add(new QuitCommand());
-		this.commands.add(new ScriptCommand(this.scriptRunner));
+		this.commands.add(new ScriptCommand(this.scriptRunner , pluginRepository));
 		this.commands.add(new ProcessExecutionCommand());
 		this.commands.add(new PluginCommand(this.pluginRepository));
 	}
