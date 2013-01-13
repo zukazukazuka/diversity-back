@@ -40,7 +40,7 @@ public class ConsoleMediator {
 	protected void buildCommands() {
 		this.commands.add(new QuitCommand());
 		this.commands.add(new ScriptCommand(this.scriptRunner , pluginRepository));
-		this.commands.add(new ProcessExecutionCommand());
+		this.commands.add(new ProcessExecutionCommand(this.console));
 		this.commands.add(new PluginCommand(this.pluginRepository));
 	}
 
@@ -60,7 +60,7 @@ public class ConsoleMediator {
 			STATUS status = null;
 			for (ConsoleHandleCommand command : this.commands) {
 				status = command.execute(line);
-				if (status != null && STATUS.STOP == status) {
+				if (status != null && (STATUS.STOP == status || STATUS.DONE == status)) {
 					break;
 				}
 			}

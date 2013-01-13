@@ -23,7 +23,7 @@ public class PluginCommand implements ConsoleHandleCommand {
 		for (ScriptDescriptor resource :resources){
 			System.out.println(resource.getDescription());
 		}
-		return STATUS.CONTINE;
+		return STATUS.DONE;
 	}
 
 }

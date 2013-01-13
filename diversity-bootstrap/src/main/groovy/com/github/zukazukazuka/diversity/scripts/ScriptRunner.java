@@ -9,8 +9,9 @@ import gant.Gant;
 import org.apache.tools.ant.BuildListener;
 import org.codehaus.gant.GantBinding;
 
+import com.github.zukazukazuka.diversity.cli.CommandLine;
 import com.github.zukazukazuka.diversity.plugin.ScriptDescriptor;
-
+	
 public class ScriptRunner {
 
 	private List<BuildListener> listeners = new ArrayList<BuildListener>();
@@ -18,9 +19,11 @@ public class ScriptRunner {
 	public ScriptRunner(){
 	}
 	
-	public void execute(ScriptDescriptor descriptor){
+	public void execute(ScriptDescriptor descriptor ,CommandLine commandLine){
 		File scriptFile = descriptor.getScriptFile();
 		GantBinding binding = new GantBinding();
+		binding.setProperty("args", commandLine.getRemainingArgs());
+		binding.setVariable("options", commandLine.getAllOptions());
 		Gant gant = new Gant(binding);
 		for (BuildListener listener :this.listeners){
 			gant.addBuildListener(listener);

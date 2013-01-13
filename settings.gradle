@@ -1,0 +1,2 @@
+include 'diversity-bootstrap'
+include 'plugins/core'

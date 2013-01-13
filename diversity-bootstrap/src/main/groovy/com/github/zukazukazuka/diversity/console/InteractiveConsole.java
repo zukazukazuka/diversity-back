@@ -22,6 +22,8 @@ public class InteractiveConsole {
 
 	public static final Character SECURE_MASK_CHAR = new Character('*');
 
+    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
+
 	protected ConsoleReader reader;
 
 	private boolean userInputActive;
@@ -38,9 +40,8 @@ public class InteractiveConsole {
 	}
 
 	protected InteractiveConsole() throws IOException {
-		out = new PrintStream(System.out);
-		this.reader = new ConsoleReader(System.in, new OutputStreamWriter(
-				this.ansiWrap(out)));
+		out = new PrintStream(ansiWrap(System.out));
+		this.reader = new ConsoleReader(System.in, new OutputStreamWriter(this.out));
 		out.println();
 	}
 
@@ -92,4 +93,26 @@ public class InteractiveConsole {
 	public PrintStream getOut(){
 		return this.out;
 	}
+	
+
+	public void log(String message){
+        try {
+            if (message.endsWith(LINE_SEPARATOR)) {
+                this.out.print(message);
+            }
+            else {
+                this.out.println(message);
+            }
+        } finally {
+            postPrintMessage();
+        }
+	}
+	
+    private void postPrintMessage() {
+//        progressIndicatorActive = false;
+        if (userInputActive) {
+            showPrompt();
+        }
+    }
+
 }

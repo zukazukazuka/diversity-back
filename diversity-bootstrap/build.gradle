@@ -25,6 +25,7 @@ ext {
     ivyVersion = "2.2.0"
     jlineVersion = "1.0"
     slf4jVersion = "1.7.2"
+    logbackVersion="1.0.9"
     junitVersion = "4.11"
     jansiVersion = "1.2.1"
     s2utilVersion = "0.0.1"
@@ -52,7 +53,23 @@ dependencies {
     compile("org.codehaus.gant:gant_groovy1.8:${gantVersion}") {
         exclude module:'commons-cli'
     }
-
+    compile("ch.qos.logback:logback-classic:${logbackVersion}"){
+        exclude module:['com.h2database',
+        'com.icegreen',
+        'dom4j',
+        'hsqldb',
+        'javax.mail',
+        'javax.servlet',
+        'org.apache.felix',
+        'org.apache.geronimo.specs',
+        'org.codehaus.groovy',
+        'org.subethamail',
+        'postgresql',
+        'mysql',
+        'org.slf4j'
+        ]
+    }
+    compile("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
     compile("junit:junit:${junitVersion}")
     
     testCompile "org.mockito:mockito-core:${mockitoVersion}"

@@ -1,6 +1,8 @@
 target ( stuff : 'A target to do some stuff.' ) {
-  println ( 'Stuff' )
-  echo ( message : 'A default message from Ant.' )
+    println ( 'Stuff' )
+    echo ( message : 'A default message from Ant.' )
+    echo ( message : "echo for args ${args}")
+    echo ( message : "echo for options ${options}")
 }
 
 setDefaultTarget ('stuff')
