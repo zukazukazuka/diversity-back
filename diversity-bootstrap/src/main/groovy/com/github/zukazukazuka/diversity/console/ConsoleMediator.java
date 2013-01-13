@@ -1,15 +1,21 @@
 package com.github.zukazukazuka.diversity.console;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jline.Completor;
 import jline.SimpleCompletor;
 
 import com.github.zukazukazuka.diversity.console.ConsoleHandleCommand.STATUS;
+import com.github.zukazukazuka.diversity.console.command.PluginCommand;
 import com.github.zukazukazuka.diversity.console.command.ProcessExecutionCommand;
 import com.github.zukazukazuka.diversity.console.command.QuitCommand;
 import com.github.zukazukazuka.diversity.console.command.ScriptCommand;
+import com.github.zukazukazuka.diversity.plugin.PluginRepository;
+import com.github.zukazukazuka.diversity.plugin.ScriptDescriptor;
 import com.github.zukazukazuka.diversity.scripts.ScriptRunner;
 
 public class ConsoleMediator {
@@ -20,9 +26,12 @@ public class ConsoleMediator {
 
 	private ScriptRunner scriptRunner;
 
-	public ConsoleMediator(ScriptRunner scriptRunner, InteractiveConsole console) {
+	private PluginRepository pluginRepository;
+
+	public ConsoleMediator(ScriptRunner scriptRunner, InteractiveConsole console ,PluginRepository pluginRepository ) {
 		this.scriptRunner = scriptRunner;
 		this.console = console;
+		this.pluginRepository = pluginRepository;
 		buildCommands();
 		this.setUpCompletor();
 	}
@@ -31,12 +40,16 @@ public class ConsoleMediator {
 		this.commands.add(new QuitCommand());
 		this.commands.add(new ScriptCommand(this.scriptRunner));
 		this.commands.add(new ProcessExecutionCommand());
+		this.commands.add(new PluginCommand(this.pluginRepository));
 	}
 
 	protected void setUpCompletor(){
-		//TODO sample implementation
-		Completor completor = new SimpleCompletor(new String[] { "foo", "bar",
-        "baz" });
+		Collection<ScriptDescriptor> descriptors = this.pluginRepository.getAllDescriptors();
+		List<String> candicates = new ArrayList<String>();
+		for(ScriptDescriptor descriptor:descriptors){
+			candicates.add(descriptor.getDescription());
+		}
+		Completor completor = new SimpleCompletor(candicates.toArray(new String[0]));
 		this.console.addCompletor(completor);
 	}
 	

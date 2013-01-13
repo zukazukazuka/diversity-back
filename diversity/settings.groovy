@@ -1,0 +1,5 @@
+diversity {
+    plugin {
+        global = "./plugins"
+    }
+}
