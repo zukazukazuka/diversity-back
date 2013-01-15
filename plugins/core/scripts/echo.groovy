@@ -5,4 +5,8 @@ target ( stuff : 'A target to do some stuff.' ) {
     echo ( message : "echo for options ${options}")
 }
 
+target (help : "Help for this Script"){
+    echo (message : "this script is sample Script")
+}
+
 setDefaultTarget ('stuff')

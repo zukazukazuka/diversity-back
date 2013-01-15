@@ -1,10 +1,10 @@
 package com.github.zukazukazuka.diversity.scripts;
 
+import gant.Gant;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import gant.Gant;
 
 import org.apache.tools.ant.BuildListener;
 import org.codehaus.gant.GantBinding;
@@ -30,6 +30,12 @@ public class ScriptRunner {
 		}
 		gant.loadScript(scriptFile);
 		gant.prepareTargets();
+		if (commandLine.hasOption("help")){
+			List<String> targetNames = new ArrayList<String>();
+			targetNames.add("help");
+			gant.executeTargets("dispatch" , targetNames);
+			return ;
+		}
 		gant.executeTargets();
 	}
 	
