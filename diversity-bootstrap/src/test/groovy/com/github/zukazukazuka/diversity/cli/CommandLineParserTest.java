@@ -8,19 +8,19 @@ import org.junit.Test;
 
 public class CommandLineParserTest {
 
-	private CommandLineParser parser;
+    private CommandLineParser parser;
 
-	@Before
-	public void setUp() {
-		this.parser = new CommandLineParser();
-		this.parser.addOptions("debug", "debugingOption");
-	}
+    @Before
+    public void setUp() {
+        this.parser = new CommandLineParser();
+        this.parser.addOptions("debug", "debugingOption");
+    }
 
-	@Test
-	public void testParseOption() {
-		String[] args = new String[] { "-debug", "-verbose", "refresh" };
-		CommandLine actual = this.parser.parse(args);
-		assertThat(actual.hasOption("debug"), is(true));
-	}
+    @Test
+    public void testParseOption() {
+        String[] args = new String[] { "-debug", "-verbose", "refresh" };
+        CommandLine actual = this.parser.parse(args);
+        assertThat(actual.hasOption("debug"), is(true));
+    }
 
 }

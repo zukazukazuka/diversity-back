@@ -48,7 +48,7 @@ public interface CommandLine {
 
     void setCommand(String scriptName);
 
-	public Properties getSystemProperties();
+    public Properties getSystemProperties();
 
-	public Map<String , Object> getAllOptions();
+    public Map<String , Object> getAllOptions();
 }

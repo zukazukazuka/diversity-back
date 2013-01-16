@@ -1,7 +1,7 @@
 package com.github.zukazukazuka.diversity.cli;
 
 public class Option {
-	
+    
     private String name;
     
     private String description;
