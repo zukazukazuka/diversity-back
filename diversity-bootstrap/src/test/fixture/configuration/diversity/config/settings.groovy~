@@ -1,0 +1,6 @@
+diversity {
+    sample1 = "value1"
+    nest {
+        key = "value"
+    }
+}
