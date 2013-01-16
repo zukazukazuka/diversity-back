@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# resolve links - $0 may be a softlink
+PRG="$0"
+CURR_DIR=`pwd .`
+
+while [ -h "$PRG" ]; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+
+# Get standard environment variables
+PRGDIR=`dirname "$PRG"`
+
+# Only set CATALINA_HOME if not already set
+[ -z "$DEVC_HOME" ] && DEVC_HOME=`cd "$PRGDIR/.." >/dev/null; pwd`
+
+CLASSPATH=
+LIBDIR=$DEVC_HOME"/lib"
+LIBS=$(find $LIBDIR -name '*.jar' -o -name '*.zip')
+if [ $? != 0 ]; then
+  echo "file not found."
+  exit 1
+fi
+
+for LIB in ${LIBS[@]}
+do
+   if [ -r ${LIB} ]; then
+      if [ -z $CLASSPATH ]; then
+         CLASSPATH="${LIB}"
+      else
+         CLASSPATH=$CLASSPATH:"${LIB}"
+      fi   
+   fi
+done
+
+CMD_LINE_ARGS=""
+DISABLE_RELOADING=false
+CP=""
+
+while true; do
+  if [ "$1" = "-cp" ] || [ "$1" = "-classpath" ]; then
+    CP=$2
+    shift 2
+    break
+  fi
+
+  if [ "$1" = "-debug" ]; then
+    JAVA_OPTS="$JAVA_OPTS -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+    shift
+    break
+  fi
+
+  if [ "$1" != -* ]; then
+    break
+  fi
+
+  CMD_LINE_ARGS="$CMD_LINE_ARGS $1"
+  shift
+done
+
+ARGUMENTS="$CMD_LINE_ARGS $@"
+
+JAVACMD="java"
+STARTER_MAIN_CLASS="com.github.zukazukazuka.diversity.console.Bootstrap"
+JAVA_OPTS=$JAVA_OPTS" -Ddiversity.currentDir=$CURR_DIR -Ddiversity.home=$DEVC_HOME"
+
+exec "$JAVACMD" $JAVA_OPTS -classpath "$CLASSPATH" $STARTER_MAIN_CLASS  "${ARGUMENTS}"
