@@ -86,6 +86,7 @@ eclipse.classpath.file {
 }
 
 assemble.doLast {
+    file("$buildDir/assembly/bin").mkdir()
     copy {
         from configurations.runtime
         into "$buildDir/assembly/lib"
